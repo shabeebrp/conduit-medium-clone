@@ -40,6 +40,7 @@
             <button
               class="btn btn-lg btn-primary pull-xs-right"
               @click="register"
+              :disabled="disableRegisterButton"
             >
               Sign up
             </button>
@@ -58,7 +59,8 @@ export default {
       name: "",
       email: "",
       password: "",
-      errors: []
+      errors: [],
+      disableRegisterButton: false
     };
   },
   methods: {
@@ -66,12 +68,14 @@ export default {
       var username = this.name;
       var email = this.email;
       var password = this.password;
+      this.disableRegisterButton = true;
       this.$store
         .dispatch("register", { username, email, password })
         .then(() => this.$router.push({ name: "Home" }))
         .catch(error => {
           this.errors = formatApiErrors(error.response.data.errors);
-        });
+        })
+        .then(() => (this.disableRegisterButton = false));
     }
   }
 };
