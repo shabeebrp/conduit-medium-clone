@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import store from "@/store";
 Vue.use(VueRouter);
 
 const routes = [
@@ -22,12 +23,22 @@ const routes = [
   {
     path: "/settings",
     name: "Settings",
-    component: () => import("@/views/Settings.vue")
+    component: () => import("@/views/Settings.vue"),
+    beforeEnter(to, from, next) {
+      if (!store.getters.isAuthenticated) {
+        next({ name: "Login" });
+      } else next();
+    }
   },
   {
     path: "/editor",
     name: "ArticleCreator",
-    component: () => import("@/views/ArticleCreate.vue")
+    component: () => import("@/views/ArticleCreate.vue"),
+    beforeEnter(to, from, next) {
+      if (!store.getters.isAuthenticated) {
+        next({ name: "Login" });
+      } else next();
+    }
   },
   {
     path: "/editor/:articleId",

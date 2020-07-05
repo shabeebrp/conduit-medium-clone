@@ -7,12 +7,12 @@
           <!-- Add "active" class when you're on that page" -->
           <router-link class="nav-link active" to="/">Home</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isAuthenticated">
           <router-link class="nav-link" to="/editor">
             <i class="ion-compose"></i>&nbsp;New Post
           </router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isAuthenticated">
           <router-link class="nav-link" to="/settings">
             <i class="ion-gear-a"></i>&nbsp;Settings
           </router-link>
@@ -21,7 +21,9 @@
           <router-link class="nav-link" to="/login">Sign in</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/register">Sign up</router-link>
+          <router-link class="nav-link" to="/register" v-if="!isAuthenticated"
+            >Sign up</router-link
+          >
         </li>
       </ul>
     </div>
@@ -29,7 +31,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    }
+  }
+};
 </script>
 
 <style scoped></style>
