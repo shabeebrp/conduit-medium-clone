@@ -27,7 +27,11 @@
                 v-model="password"
               />
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right" @click="login">
+            <button
+              class="btn btn-lg btn-primary pull-xs-right"
+              :disabled="disableLoginButton"
+              @click="login"
+            >
               Login
             </button>
           </form>
@@ -44,19 +48,22 @@ export default {
     return {
       email: "",
       password: "",
-      errors: []
+      errors: [],
+      disableLoginButton: false
     };
   },
   methods: {
     login() {
       var email = this.email;
       var password = this.password;
+      this.disableLoginButton = true;
       this.$store
         .dispatch("login", { email, password })
         .then(() => this.$router.push({ name: "Home" }))
         .catch(error => {
           this.errors = formatApiErrors(error.response.data.errors);
-        });
+        })
+        .then(() => (this.disableLoginButton = false));
     }
   }
 };
